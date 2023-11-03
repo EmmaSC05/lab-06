@@ -28,6 +28,13 @@ diamonds <- diamonds %>% rename(
 
 ```{r}
 # Do some preliminary investigations & cleaning
+mean(diamonds$price, na.rm = FALSE)
+median(diamonds$price, na.rm = FALSE)
+getmode <- function(v) {
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+getmode((diamonds$price))
 
 
 
@@ -39,11 +46,11 @@ diamonds <- diamonds %>% rename(
 
 ```{r}
 
-diamonds <- diamonds %>%
-  mutate(table_mm = table_pct * width_mm / 100)
+
 
 # Overall table_mm arithmetic mean?
-
+diamonds <- diamonds %>%
+  mutate(table_mm = table_pct * width_mm / 100)
 
 
 
@@ -51,14 +58,16 @@ diamonds <- diamonds %>%
 
 # table_mm arithmetic mean within each clarity category
 
-
+diamonds %>%
+  group_by(diamonds$clarity) %>%
+  summarise(mean_table_mm = mean(table_mm))
 
 
 
 
 ```
 
-_Add your comment here_
+as the clarity goes up the mean table (mm) goes down.
 
 ## Exercise 3
 
@@ -70,7 +79,10 @@ _Do derivation on paper, unless you know how to write LaTeX code_
 ```{r}
 # Write gmean() command
 
-
+gmean <- function(x){
+  return(exp(mean(log(x))))}
+  
+gmean(diamonds$price)
 
 ```
 
